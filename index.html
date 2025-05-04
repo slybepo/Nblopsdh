@@ -612,7 +612,7 @@
             <h1>Sentynel</h1>
             <p id="heroDescription">Advanced protection for your Discord server with fast AutoMod, anti-raid, anti-nuke, and powerful moderation tools.</p>
             <div class="cta-buttons">
-                <a href="#" class="btn btn-primary" id="inviteBtn">Invite to Server</a>
+                <a href="https://discord.com/oauth2/authorize?client_id=1230267230705418270&permissions=28340274982134&integration_type=0&scope=bot" class="btn btn-primary" id="inviteBtn">Invite to Server</a>
                 <a href="#" class="btn btn-secondary">Documentation</a>
             </div>
         </section>
@@ -728,7 +728,7 @@
             
             loginBtn.addEventListener('click', function() {
                 // Redirect to Discord OAuth (replace with your actual OAuth URL)
-                window.location.href = `https://discord.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=${encodeURIComponent(window.location.href)}&response_type=token&scope=identify%20guilds`;
+                window.location.href = `https://discord.com/oauth2/authorize?client_id=1230267230705418270&response_type=code&redirect_uri=https%3A%2F%2Fsentynel.dreamweave.lol%2F&scope=identify+connections+guilds.join+guilds.channels.read`;
             });
             
             // Handle OAuth callback if token is in URL
