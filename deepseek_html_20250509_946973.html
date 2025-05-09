@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentynel Premium - Advanced Protection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8A6DF7;
+            --primary-dark: #6A4DF2;
+            --gold: #FFD700;
+            --platinum: #E5E4E2;
+            --background: #0F0B21;
+            --card-bg: #1A1538;
+            --text: #FFFFFF;
+            --text-secondary: #C9C5D8;
+            --accent: #FF4D88;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Premium Glow Effect */
+        .premium-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(138, 109, 247, 0.15) 0%, rgba(31, 27, 64, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Diamond Pattern Overlay */
+        .diamond-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(135deg, rgba(255, 215, 0, 0.03) 25%, transparent 25%),
+                linear-gradient(225deg, rgba(255, 215, 0, 0.03) 25%, transparent 25%),
+                linear-gradient(315deg, rgba(255, 215, 0, 0.03) 25%, transparent 25%),
+                linear-gradient(45deg, rgba(255, 215, 0, 0.03) 25%, transparent 25%);
+            background-size: 60px 60px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Navbar */
+        nav {
+            background: rgba(26, 21, 56, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(138, 109, 247, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .premium-badge {
+            background: linear-gradient(135deg, var(--gold), #FFC000);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(138, 109, 247, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 109, 247, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 5% 150px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(138, 109, 247, 0.1) 0%, rgba(15, 11, 33, 0) 70%);
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-logo {
+            height: 120px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 20px rgba(138, 109, 247, 0.5));
+        }
+
+        .hero h1 {
+            font-size: 60px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--gold), var(--platinum));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .price-tag {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 40px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 60px;
+            position: relative;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--primary));
+            border-radius: 3px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(138, 109, 247, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(138, 109, 247, 0.1), rgba(255, 77, 136, 0.05));
+            z-index: -1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(138, 109, 247, 0.5);
+        }
+
+        .feature-icon {
+            font-size: 50px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--gold), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .feature-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* Comparison Section */
+        .comparison {
+            padding: 80px 5%;
+            background: rgba(26, 21, 56, 0.5);
+            backdrop-filter: blur(10px);
+            margin: 80px 0;
+            border-top: 1px solid rgba(138, 109, 247, 0.2);
+            border-bottom: 1px solid rgba(138, 109, 247, 0.2);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .comparison-card {
+            text-align: center;
+            padding: 40px 30px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card.free {
+            background: rgba(26, 21, 56, 0.7);
+            border: 1px solid rgba(138, 109, 247, 0.2);
+        }
+
+        .comparison-card.premium {
+            background: linear-gradient(135deg, rgba(138, 109, 247, 0.2), rgba(255, 77, 136, 0.1));
+            border: 1px solid rgba(138, 109, 247, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .comparison-card.premium::after {
+            content: 'BEST VALUE';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--gold);
+            color: #000;
+            padding: 5px 30px;
+            transform: rotate(45deg);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .plan-name {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .plan-name.free {
+            color: var(--text);
+        }
+
+        .plan-name.premium {
+            color: var(--gold);
+        }
+
+        .plan-price {
+            font-size: 40px;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .plan-price.free {
+            color: var(--text);
+        }
+
+        .plan-price.premium {
+            color: var(--gold);
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .plan-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(138, 109, 247, 0.1);
+            color: var(--text-secondary);
+        }
+
+        .plan-features.premium li {
+            color: var(--text);
+        }
+
+        .plan-features li i {
+            margin-right: 10px;
+        }
+
+        .plan-features.free li i {
+            color: var(--text-secondary);
+        }
+
+        .plan-features.premium li i {
+            color: var(--gold);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 5% 30px;
+            background: rgba(15, 11, 33, 0.8);
+            text-align: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .footer-logo img {
+            height: 40px;
+        }
+
+        .footer-logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Premium Glow Effects -->
+    <div class="premium-glow"></div>
+    <div class="diamond-pattern"></div>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">
+            <img src="https://i.ibb.co/Kc9x3mdt/IMG-20250504-111411.jpg" alt="Sentynel Logo">
+            <span class="logo-text">Sentynel <span class="premium-badge"><i class="fas fa-crown"></i> PREMIUM</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#comparison">Comparison</a>
+            <a href="#">Support</a>
+            <a href="#">Documentation</a>
+        </div>
+        <button class="cta-button">Get Premium</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <img src="https://i.ibb.co/Kc9x3mdt/IMG-20250504-111411.jpg" alt="Sentynel Premium Logo" class="hero-logo">
+        <h1>Sentynel Premium</h1>
+        <p>Experience the ultimate in Discord protection with our premium tier. Faster performance, AI-powered moderation, and exclusive features to keep your community safe and thriving.</p>
+        <div class="price-tag">
+            $9.99/month <span style="font-size: 16px; color: var(--text-secondary);">| Cancel anytime</span>
+        </div>
+        <button class="cta-button" style="padding: 15px 40px; font-size: 18px;">Upgrade Now</button>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Premium Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="feature-title">AI-Powered Moderation</h3>
+                <p class="feature-desc">Our advanced AI learns from your server's activity to detect and prevent sophisticated spam, scams, and toxic behavior before it happens.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="feature-title">Enhanced Anti-Raid</h3>
+                <p class="feature-desc">Real-time raid detection with machine learning that identifies and blocks coordinated attacks before they can disrupt your community.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bomb"></i>
+                </div>
+                <h3 class="feature-title">Nuclear Protection</h3>
+                <p class="feature-desc">Advanced anti-nuke systems with role hierarchy protection, channel backup, and instant recovery from malicious admin actions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h3 class="feature-title">Biometric Verification</h3>
+                <p class="feature-desc">Multi-factor authentication including CAPTCHA, phone verification, and optional biometric checks for high-security servers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h3 class="feature-title">Server Backups</h3>
+                <p class="feature-desc">Automatic daily backups of your server settings, roles, channels, and member data with one-click restoration.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users-cog"></i>
+                </div>
+                <h3 class="feature-title">Member Preservation</h3>
+                <p class="feature-desc">Even if members leave, we preserve their roles and permissions so they can be automatically restored if they rejoin.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-clone"></i>
+                </div>
+                <h3 class="feature-title">Template System</h3>
+                <p class="feature-desc">Create and save server templates with all settings, roles, and channels for quick deployment of new community spaces.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tachometer-alt"></i>
+                </div>
+                <h3 class="feature-title">Premium Performance</h3>
+                <p class="feature-desc">Dedicated server resources ensure your moderation commands execute instantly, even during high-traffic events.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison" id="comparison">
+        <h2 class="section-title">Free vs Premium</h2>
+        <div class="comparison-grid">
+            <div class="comparison-card free">
+                <h3 class="plan-name free">Free</h3>
+                <div class="plan-price free">$0</div>
+                <ul class="plan-features free">
+                    <li><i class="fas fa-check"></i> Basic AutoMod</li>
+                    <li><i class="fas fa-check"></i> Standard Verification</li>
+                    <li><i class="fas fa-check"></i> Essential Anti-Raid</li>
+                    <li><i class="fas fa-check"></i> Core Moderation Tools</li>
+                    <li><i class="fas fa-times"></i> AI Moderation</li>
+                    <li><i class="fas fa-times"></i> Server Backups</li>
+                    <li><i class="fas fa-times"></i> Member Preservation</li>
+                    <li><i class="fas fa-times"></i> Template System</li>
+                </ul>
+                <button class="cta-button" style="background: var(--card-bg); color: var(--text); width: 100%;">Current Plan</button>
+            </div>
+            <div class="comparison-card premium">
+                <h3 class="plan-name premium">Premium</h3>
+                <div class="plan-price premium">$9.99<span style="font-size: 16px;">/month</span></div>
+                <ul class="plan-features premium">
+                    <li><i class="fas fa-check"></i> <strong>AI-Powered</strong> AutoMod</li>
+                    <li><i class="fas fa-check"></i> <strong>Advanced</strong> Verification</li>
+                    <li><i class="fas fa-check"></i> <strong>Enhanced</strong> Anti-Raid</li>
+                    <li><i class="fas fa-check"></i> <strong>Premium</strong> Moderation Tools</li>
+                    <li><i class="fas fa-check"></i> <strong>Daily</strong> Server Backups</li>
+                    <li><i class="fas fa-check"></i> <strong>Member</strong> Preservation</li>
+                    <li><i class="fas fa-check"></i> <strong>Custom</strong> Template System</li>
+                    <li><i class="fas fa-check"></i> <strong>Priority</strong> Support</li>
+                </ul>
+                <button class="cta-button" style="width: 100%;">Upgrade Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <img src="https://i.ibb.co/Kc9x3mdt/IMG-20250504-111411.jpg" alt="Sentynel Logo">
+            <span class="footer-logo-text">Sentynel</span>
+        </div>
+        <div class="footer-links">
+            <a href="#">Home</a>
+            <a href="#features">Features</a>
+            <a href="#comparison">Pricing</a>
+            <a href="#">Documentation</a>
+            <a href="#">Support</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+        <div class="copyright">
+            &copy; 2023 Sentynel. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>
