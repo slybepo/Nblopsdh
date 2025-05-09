@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
+            --gold: #FFD700;
+            --gold-dark: #FFC000;
+            --text-dark: #3A2E00;
             --primary: #5865F2;
             --primary-dark: #4752C4;
             --background: #0A0B10;
@@ -43,6 +46,63 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+        }
+        .gold-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--text-dark);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 15px rgba(255, 215, 0, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .gold-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 55%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+
+        .gold-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 20px rgba(255, 215, 0, 0.4),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3);
+        }
+
+        .gold-button:active {
+            transform: translateY(1px);
+        }
+
+        .gold-button i {
+            font-size: 18px;
         }
 
         /* Chromatic Aberration Animated Background */
@@ -613,7 +673,11 @@
             <p id="heroDescription">Advanced protection for your Discord server with fast AutoMod, anti-raid, anti-nuke, and powerful moderation tools.</p>
             <div class="cta-buttons">
                 <a href="https://discord.com/oauth2/authorize?client_id=1230267230705418270&permissions=28340274982134&integration_type=0&scope=bot" class="btn btn-primary" id="inviteBtn">Invite to Server</a>
-                <a href="#" class="btn btn-secondary">Documentation</a>
+                <a href="#" class="btn btn-secondary">Community</a>
+                <button onclick="window.location.href='/premium'" class="gold-button">
+        <i class="fas fa-coins"></i>
+        Upgrade to Premium
+                </button>
             </div>
         </section>
 
@@ -623,10 +687,11 @@
                 <img src="https://i.ibb.co/Kc9x3mdt/IMG-20250504-111411.jpg" alt="Sentynel Logo" class="embed-logo">
                 <div class="embed-title">Sentynel</div>
             </div>
+            
             <div class="embed-description">See what's on Sentynel! Advanced protection for your Discord server with fast AutoMod, anti-raid, anti-nuke, and powerful moderation tools.</div>
             <div class="embed-footer">
                 <img src="https://i.ibb.co/Kc9x3mdt/IMG-20250504-111411.jpg" alt="Sentynel Logo" class="footer-icon">
-                Sentynel Bot • Click to visit
+                Sentynel Bot 
             </div>
         </div>
 
