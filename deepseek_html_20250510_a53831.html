@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel Security | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --text: #ffffff;
+            --text-secondary: #b8b8b8;
+            --card-bg: #1f1f3d;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --border-radius: 12px;
+            --nav-height: 70px;
+            --footer-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--primary);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--secondary);
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-brand img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+        }
+
+        .nav-brand h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #e94560, #0f3460);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+        }
+
+        .nav-link i {
+            font-size: 1rem;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            height: var(--footer-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--text);
+        }
+
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+        }
+
+        .login-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transform: translateY(-50px);
+        }
+
+        .login-header {
+            margin-bottom: 30px;
+        }
+
+        .login-header img {
+            height: 80px;
+            width: 80px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            border: 3px solid var(--highlight);
+        }
+
+        .login-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #e94560, #0f3460);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            gap: 10px;
+        }
+
+        .btn-discord {
+            background-color: #5865F2;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-discord:hover {
+            background-color: #4752c4;
+            transform: translateY(-2px);
+        }
+
+        .btn-discord i {
+            font-size: 1.2rem;
+        }
+
+        /* Dashboard */
+        .dashboard-container {
+            display: none;
+            flex: 1;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            height: calc(100vh - var(--nav-height) - var(--footer-height));
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: var(--secondary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .user-info h4 {
+            font-size: 1rem;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--accent);
+            color: var(--text);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Main Content */
+        .dashboard-main {
+            background-color: var(--secondary);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .page-actions .btn {
+            padding: 10px 20px;
+        }
+
+        /* Servers Grid */
+        .servers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .server-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .server-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .server-banner {
+            height: 120px;
+            background-color: var(--accent);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .server-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+        }
+
+        .server-icon {
+            position: absolute;
+            bottom: -20px;
+            left: 20px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 4px solid var(--card-bg);
+            background-color: var(--card-bg);
+            background-size: cover;
+            z-index: 2;
+        }
+
+        .server-content {
+            padding: 30px 20px 20px;
+        }
+
+        .server-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .server-id {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+
+        .server-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 3px;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--highlight);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 15px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .servers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-brand">
+            <img src="https://i.imgur.com/JqYeYn7.png" alt="Sentinel Logo">
+            <h1>Sentinel Security</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-book"></i>
+                <span>Docs</span>
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-headset"></i>
+                <span>Support</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Login Page -->
+        <div class="login-container" id="login-page">
+            <div class="login-card">
+                <div class="login-header">
+                    <img src="https://i.imgur.com/JqYeYn7.png" alt="Sentinel Logo">
+                    <h2>Sentinel Security Dashboard</h2>
+                    <p>Advanced protection for your Discord community</p>
+                </div>
+                <button class="btn btn-discord" id="login-btn">
+                    <i class="fab fa-discord"></i>
+                    Login with Discord
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard-container" id="dashboard">
+            <div class="dashboard-grid">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div class="sidebar-header">
+                        <img id="user-avatar" src="" alt="User Avatar">
+                        <div class="user-info">
+                            <h4 id="username">Loading...</h4>
+                            <p id="user-tag">#0000</p>
+                        </div>
+                    </div>
+                    <div class="sidebar-nav">
+                        <a href="#" class="nav-item active">
+                            <i class="fas fa-server"></i>
+                            <span>Servers</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Security</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Analytics</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-history"></i>
+                            <span>Audit Logs</span>
+                        </a>
+                        <a href="#" class="nav-item">
+                            <i class="fas fa-bell"></i>
+                            <span>Alerts</span>
+                        </a>
+                    </div>
+                    <div class="sidebar-footer">
+                        <button class="logout-btn" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="dashboard-main">
+                    <div class="page-header">
+                        <h2 class="page-title">Your Servers</h2>
+                        <div class="page-actions">
+                            <button class="btn" style="background-color: var(--highlight);">
+                                <i class="fas fa-plus"></i>
+                                <span>Invite Sentinel</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="servers-container">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div>
+            &copy; 2025 Sentinel Security Bot. All rights reserved.
+        </div>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Contact Us</a>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration
+        const config = {
+            clientId: 'YOUR_CLIENT_ID_HERE',
+            redirectUri: window.location.href.includes('localhost') 
+                ? 'http://localhost:8080' 
+                : 'YOUR_PRODUCTION_URL',
+            apiBaseUrl: 'https://your-api-url.com',
+            botInviteUrl: 'https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot&permissions=8'
+        };
+
+        // DOM Elements
+        const loginPage = document.getElementById('login-page');
+        const dashboard = document.getElementById('dashboard');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userAvatar = document.getElementById('user-avatar');
+        const username = document.getElementById('username');
+        const userTag = document.getElementById('user-tag');
+        const serversContainer = document.getElementById('servers-container');
+
+        // State
+        let user = null;
+        let guilds = [];
+
+        // Initialize the app
+        function init() {
+            checkAuth();
+            setupEventListeners();
+        }
+
+        // Check authentication status
+        function checkAuth() {
+            const token = localStorage.getItem('discord_token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            
+            if (token) {
+                fetchUserData(token);
+            } else if (code) {
+                exchangeCodeForToken(code);
+            } else {
+                showLoginPage();
+            }
+        }
+
+        // Show login page
+        function showLoginPage() {
+            loginPage.style.display = 'flex';
+            dashboard.style.display = 'none';
+        }
+
+        // Show dashboard
+        function showDashboard() {
+            loginPage.style.display = 'none';
+            dashboard.style.display = 'block';
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Login button
+            loginBtn.addEventListener('click', () => {
+                const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${config.clientId}&redirect_uri=${encodeURIComponent(config.redirectUri)}&response_type=code&scope=identify%20guilds`;
+                window.location.href = authUrl;
+            });
+
+            // Logout button
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('discord_token');
+                window.location.href = window.location.pathname;
+            });
+        }
+
+        // Exchange code for token
+        async function exchangeCodeForToken(code) {
+            try {
+                serversContainer.innerHTML = `
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                `;
+
+                // In a real application, you would make a request to your backend here
+                // For demo purposes, we'll simulate a successful response
+                const response = await simulateBackendRequest(code);
+                
+                if (response.access_token) {
+                    localStorage.setItem('discord_token', response.access_token);
+                    fetchUserData(response.access_token);
+                    
+                    // Clean the URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } else {
+                    showLoginPage();
+                }
+            } catch (error) {
+                console.error('Error exchanging code:', error);
+                showLoginPage();
+            }
+        }
+
+        // Simulate backend request (replace with actual fetch in production)
+        function simulateBackendRequest(code) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        access_token: 'simulated_access_token',
+                        token_type: 'Bearer',
+                        expires_in: 604800,
+                        refresh_token: 'simulated_refresh_token',
+                        scope: 'identify guilds'
+                    });
+                }, 1000);
+            });
+        }
+
+        // Fetch user data
+        async function fetchUserData(token) {
+            try {
+                // Fetch user profile
+                const userResponse = await fetch('https://discord.com/api/users/@me', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!userResponse.ok) throw new Error('Failed to fetch user data');
+                
+                user = await userResponse.json();
+                updateUserProfile(user);
+
+                // Fetch user's guilds
+                const guildsResponse = await fetch('https://discord.com/api/users/@me/guilds', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!guildsResponse.ok) throw new Error('Failed to fetch guilds');
+                
+                guilds = await guildsResponse.json();
+                fetchMutualGuilds();
+                
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                localStorage.removeItem('discord_token');
+                showLoginPage();
+            }
+        }
+
+        // Fetch mutual guilds (where both user and bot are members)
+        async function fetchMutualGuilds() {
+            try {
+                // In a real application, you would fetch from your backend
+                // For demo, we'll simulate mutual guilds
+                const mutualGuilds = guilds.filter(guild => {
+                    const hasAdmin = (guild.permissions & 0x8) === 0x8;
+                    return hasAdmin;
+                }).slice(0, 6); // Limit to 6 for demo
+                
+                // Add some mock data for demo
+                mutualGuilds.forEach(guild => {
+                    guild.hasBot = Math.random() > 0.3; // 70% chance bot is in guild
+                    guild.icon = guild.icon || null;
+                    guild.approximate_member_count = Math.floor(Math.random() * 9000) + 1000;
+                    guild.approximate_presence_count = Math.floor(guild.approximate_member_count * 0.3);
+                });
+                
+                renderGuilds(mutualGuilds);
+                showDashboard();
+                
+            } catch (error) {
+                console.error('Error fetching mutual guilds:', error);
+                renderGuilds([]);
+                showDashboard();
+            }
+        }
+
+        // Update user profile in UI
+        function updateUserProfile(userData) {
+            username.textContent = userData.username;
+            userTag.textContent = `#${userData.discriminator}`;
+            
+            if (userData.avatar) {
+                const avatarUrl = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png?size=256`;
+                userAvatar.src = avatarUrl;
+            } else {
+                const defaultAvatarNumber = userData.discriminator % 5;
+                userAvatar.src = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
+            }
+        }
+
+        // Render guilds in UI
+        function renderGuilds(guilds) {
+            if (guilds.length === 0) {
+                serversContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fas fa-server" style="font-size: 48px; color: var(--text-secondary); margin-bottom: 20px;"></i>
+                        <h3 style="margin-bottom: 10px;">No Eligible Servers</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            You don't have admin permissions in any servers where Sentinel is added.
+                        </p>
+                        <a href="${config.botInviteUrl}" class="btn" style="background-color: var(--highlight);">
+                            <i class="fas fa-plus"></i> Add Sentinel to Your Server
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="servers-grid">';
+            
+            guilds.forEach(guild => {
+                const iconUrl = guild.icon 
+                    ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=256`
+                    : 'https://cdn.discordapp.com/embed/avatars/0.png';
+                
+                const bannerColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 30%)`;
+                
+                html += `
+                    <div class="server-card" onclick="window.location.href='/dashboard/server/${guild.id}'">
+                        <div class="server-banner" style="background-color: ${bannerColor}">
+                            <div class="server-icon" style="background-image: url('${iconUrl}')"></div>
+                        </div>
+                        <div class="server-content">
+                            <h3 class="server-name">${guild.name}</h3>
+                            <p class="server-id">ID: ${guild.id}</p>
+                            <div class="server-stats">
+                                <div class="stat">
+                                    <div class="stat-value">${guild.approximate_member_count.toLocaleString()}</div>
+                                    <div class="stat-label">Members</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">${guild.approximate_presence_count.toLocaleString()}</div>
+                                    <div class="stat-label">Online</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value" style="color: ${guild.hasBot ? 'var(--success)' : 'var(--danger)'}">
+                                        ${guild.hasBot ? 'Active' : 'Inactive'}
+                                    </div>
+                                    <div class="stat-label">Status</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            serversContainer.innerHTML = html;
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
