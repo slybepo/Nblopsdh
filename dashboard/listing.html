@@ -631,7 +631,7 @@
         // ===== EVENT LISTENERS =====
         function setupEventListeners() {
             loginBtn.addEventListener('click', () => {
-                const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${config.clientId}&redirect_uri=${config.redirectUri}&response_type=code&scope=identify%20guilds`;
+                const authUrl = `https://discord.com/oauth2/authorize?client_id=1230267230705418270&response_type=code&redirect_uri=https%3A%2F%2Fsentynel.dreamweave.lol%2Fdashboard%2Flisting&scope=identify+guilds`;
                 window.location.href = authUrl;
             });
 
