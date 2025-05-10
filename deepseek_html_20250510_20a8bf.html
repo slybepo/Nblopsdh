@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Bot Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #1e1e2d;
+            --bg-secondary: #2a2a3a;
+            --bg-tertiary: #3a3a4a;
+            --text-primary: #ffffff;
+            --text-secondary: #b5b5c3;
+            --accent: #5865F2;
+            --accent-hover: #4752c4;
+            --danger: #f04747;
+            --success: #43b581;
+            --border-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background-color: var(--bg-secondary);
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .nav-item.active {
+            background-color: var(--bg-tertiary);
+            border-left: 3px solid var(--accent);
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .username {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .user-discriminator {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            padding: 10px 0;
+            z-index: 100;
+            display: none;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .dropdown-item.logout {
+            color: var(--danger);
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        /* Login page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--bg-primary);
+        }
+
+        .login-card {
+            background-color: var(--bg-secondary);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-card h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .login-card p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: none;
+            outline: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-discord {
+            background-color: #5865F2;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-discord:hover {
+            background-color: #4752c4;
+        }
+
+        .btn-discord i {
+            margin-right: 8px;
+        }
+
+        /* Server cards */
+        .servers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .server-card {
+            background-color: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .server-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .server-banner {
+            height: 100px;
+            background-color: var(--bg-tertiary);
+            background-size: cover;
+            background-position: center;
+        }
+
+        .server-content {
+            padding: 20px;
+        }
+
+        .server-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .server-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: var(--bg-tertiary);
+            background-size: cover;
+        }
+
+        .server-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .server-members {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .server-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* Loading state */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .servers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <div class="login-container" id="login-page">
+            <div class="login-card">
+                <h1>Welcome to Bot Dashboard</h1>
+                <p>Manage your servers and bot settings with ease</p>
+                <button class="btn btn-discord" id="login-btn">
+                    <i class="fab fa-discord"></i> Login with Discord
+                </button>
+            </div>
+        </div>
+
+        <div class="container" id="dashboard" style="display: none;">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h1>Bot Dashboard</h1>
+                </div>
+                <div class="sidebar-nav">
+                    <div class="nav-item active">
+                        <i class="fas fa-server"></i>
+                        <span>Servers</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-robot"></i>
+                        <span>Bot</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About</span>
+                    </div>
+                </div>
+                <div class="sidebar-footer">
+                    <div class="user-profile">
+                        <img src="" alt="User Avatar" class="user-avatar" id="user-avatar">
+                        <div class="user-info">
+                            <div class="username" id="username">Loading...</div>
+                            <div class="user-discriminator" id="user-discriminator">#0000</div>
+                        </div>
+                        <div class="dropdown-toggle" id="dropdown-toggle">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu">
+                            <div class="dropdown-item">
+                                <i class="fas fa-user"></i> Profile
+                            </div>
+                            <div class="dropdown-item">
+                                <i class="fas fa-cog"></i> Settings
+                            </div>
+                            <div class="dropdown-item logout" id="logout-btn">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="page-header">
+                    <div class="page-title">Your Servers</div>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Invite Bot
+                    </button>
+                </div>
+                <div id="servers-container">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const config = {
+            clientId: 'YOUR_CLIENT_ID',
+            redirectUri: window.location.href.includes('localhost') 
+                ? 'http://localhost:8080' 
+                : 'YOUR_PRODUCTION_URL',
+            apiBaseUrl: 'YOUR_API_BASE_URL',
+            botInviteUrl: 'https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&scope=bot&permissions=8'
+        };
+
+        // DOM Elements
+        const loginPage = document.getElementById('login-page');
+        const dashboard = document.getElementById('dashboard');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const dropdownToggle = document.getElementById('dropdown-toggle');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const userAvatar = document.getElementById('user-avatar');
+        const username = document.getElementById('username');
+        const userDiscriminator = document.getElementById('user-discriminator');
+        const serversContainer = document.getElementById('servers-container');
+
+        // State
+        let user = null;
+        let guilds = [];
+
+        // Initialize the app
+        function init() {
+            checkAuth();
+            setupEventListeners();
+        }
+
+        // Check if user is authenticated
+        function checkAuth() {
+            const token = localStorage.getItem('discord_token');
+            if (token) {
+                fetchUserData(token);
+            } else {
+                const urlParams = new URLSearchParams(window.location.search);
+                const code = urlParams.get('code');
+                
+                if (code) {
+                    exchangeCodeForToken(code);
+                } else {
+                    showLoginPage();
+                }
+            }
+        }
+
+        // Show login page
+        function showLoginPage() {
+            loginPage.style.display = 'flex';
+            dashboard.style.display = 'none';
+        }
+
+        // Show dashboard
+        function showDashboard() {
+            loginPage.style.display = 'none';
+            dashboard.style.display = 'flex';
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Login button
+            loginBtn.addEventListener('click', () => {
+                const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${config.clientId}&redirect_uri=${encodeURIComponent(config.redirectUri)}&response_type=code&scope=identify%20guilds`;
+                window.location.href = authUrl;
+            });
+
+            // Logout button
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('discord_token');
+                window.location.href = window.location.origin;
+            });
+
+            // Dropdown toggle
+            dropdownToggle.addEventListener('click', () => {
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.user-profile')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        }
+
+        // Exchange authorization code for access token
+        function exchangeCodeForToken(code) {
+            serversContainer.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            `;
+
+            // In a real app, you would make a request to your backend here
+            // This is a simplified version for demo purposes
+            fetch(`${config.apiBaseUrl}/auth/discord/callback`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    code,
+                    redirectUri: config.redirectUri
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.access_token) {
+                    localStorage.setItem('discord_token', data.access_token);
+                    fetchUserData(data.access_token);
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } else {
+                    showLoginPage();
+                }
+            })
+            .catch(error => {
+                console.error('Error exchanging code for token:', error);
+                showLoginPage();
+            });
+        }
+
+        // Fetch user data
+        function fetchUserData(token) {
+            // Fetch user profile
+            fetch('https://discord.com/api/users/@me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(userData => {
+                user = userData;
+                updateUserProfile(userData);
+
+                // Fetch user's guilds
+                return fetch('https://discord.com/api/users/@me/guilds', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            })
+            .then(response => response.json())
+            .then(guildsData => {
+                guilds = guildsData;
+                fetchMutualGuilds();
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+                localStorage.removeItem('discord_token');
+                showLoginPage();
+            });
+        }
+
+        // Fetch mutual guilds (where both user and bot are present)
+        function fetchMutualGuilds() {
+            fetch(`${config.apiBaseUrl}/guilds`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('discord_token')}`
+                }
+            })
+            .then(response => response.json())
+            .then(botGuilds => {
+                // Filter guilds where user has admin permissions and bot is in
+                const mutualGuilds = guilds.filter(guild => {
+                    const hasAdmin = (guild.permissions & 0x8) === 0x8;
+                    const botInGuild = botGuilds.some(botGuild => botGuild.id === guild.id);
+                    return hasAdmin && botInGuild;
+                });
+
+                renderGuilds(mutualGuilds);
+                showDashboard();
+            })
+            .catch(error => {
+                console.error('Error fetching mutual guilds:', error);
+                renderGuilds([]);
+                showDashboard();
+            });
+        }
+
+        // Update user profile in UI
+        function updateUserProfile(userData) {
+            username.textContent = userData.username;
+            userDiscriminator.textContent = `#${userData.discriminator}`;
+            
+            if (userData.avatar) {
+                const avatarUrl = `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png?size=256`;
+                userAvatar.src = avatarUrl;
+            } else {
+                const defaultAvatarNumber = userData.discriminator % 5;
+                userAvatar.src = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
+            }
+        }
+
+        // Render guilds in UI
+        function renderGuilds(guilds) {
+            if (guilds.length === 0) {
+                serversContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fas fa-server" style="font-size: 48px; color: var(--text-secondary); margin-bottom: 20px;"></i>
+                        <h3 style="margin-bottom: 10px;">No Servers Found</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            You don't have any servers where you have admin permissions and the bot is added.
+                        </p>
+                        <a href="${config.botInviteUrl}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Invite Bot to Your Server
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="servers-grid">';
+            
+            guilds.forEach(guild => {
+                const iconUrl = guild.icon 
+                    ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=256`
+                    : 'https://cdn.discordapp.com/embed/avatars/0.png';
+                
+                const bannerStyle = guild.banner 
+                    ? `background-image: url('https://cdn.discordapp.com/banners/${guild.id}/${guild.banner}.png?size=600')`
+                    : '';
+
+                html += `
+                    <div class="server-card" onclick="window.location.href='/dashboard/server/config?guild=${guild.id}'">
+                        <div class="server-banner" style="${bannerStyle}"></div>
+                        <div class="server-content">
+                            <div class="server-header">
+                                <div class="server-icon" style="background-image: url('${iconUrl}')"></div>
+                                <div>
+                                    <div class="server-name">${guild.name}</div>
+                                    <div class="server-members">${guild.approximate_member_count || 'Unknown'} members</div>
+                                </div>
+                            </div>
+                            <div class="server-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value">${guild.approximate_member_count || '?'}</div>
+                                    <div class="stat-label">Members</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">${guild.approximate_presence_count || '?'}</div>
+                                    <div class="stat-label">Online</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">${guild.hasBot ? '✅' : '❌'}</div>
+                                    <div class="stat-label">Bot</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            serversContainer.innerHTML = html;
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
