@@ -440,7 +440,7 @@
     <script>
         // Configuration
         const config = {
-            clientId: 'YOUR_CLIENT_ID',
+            clientId: '1230267230705418270',
             redirectUri: window.location.href.includes('localhost') 
                 ? 'http://localhost:8080' 
                 : 'YOUR_PRODUCTION_URL',
@@ -503,7 +503,7 @@
         function setupEventListeners() {
             // Login button
             loginBtn.addEventListener('click', () => {
-                const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${config.clientId}&redirect_uri=${encodeURIComponent(config.redirectUri)}&response_type=code&scope=identify%20guilds`;
+                const authUrl = `https://discord.com/oauth2/authorize?client_id=1230267230705418270&response_type=code&redirect_uri=https%3A%2F%2Fsentynel.dreamweave.lol%2Fdashboard&scope=identify+guilds.join+guilds+email+connections+guilds.members.read+role_connections.write+presences.read`;
                 window.location.href = authUrl;
             });
 
