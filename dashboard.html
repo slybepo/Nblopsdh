@@ -503,7 +503,7 @@
         function setupEventListeners() {
             // Login button
             loginBtn.addEventListener('click', () => {
-                const authUrl = `https://discord.com/oauth2/authorize?client_id=1230267230705418270&response_type=code&redirect_uri=https%3A%2F%2Fsentynel.dreamweave.lol%2Fdashboard&scope=identify+guilds.join+guilds+email+connections+guilds.members.read+role_connections.write+presences.read`;
+                const authUrl = 'https://discord.com/oauth2/authorize?client_id=1230267230705418270&response_type=code&redirect_uri=https%3A%2F%2Fsentynel.dreamweave.lol%2Fdashboard&scope=identify+guilds';
                 window.location.href = authUrl;
             });
 
